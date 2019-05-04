@@ -1,0 +1,22 @@
+{
+  "name": "taskapp",
+  "version": "6.4.1",
+  "description": "taskApp (node.js)",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.16.4",
+    "latest-version": "^5.1.0",
+    "mongodb": "^3.2.3",
+    "mongoose": "^5.5.5",
+    "nodemon": "^1.18.11",
+    "validator": "^10.11.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon src/index.js",
+    "start": "node src/index.js" 
+  },
+  "author": "",
+  "license": "ISC"
+}
