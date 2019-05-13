@@ -74,9 +74,16 @@ router.patch('/tasks/:id', async (req, res) => {
             return alloweUpdates.includes(field)
         })
         if (!isValid) throw new Error('bad update request')
-        const newTask = await Task.findByIdAndUpdate(_id, req.body, {new: true})
-        if (!newTask) throw new Error('no such an task')
-        res.status(201).send(newTask)
+        //const newTask = await Task.findByIdAndUpdate(_id, req.body, {new: true})
+        const task = await Task.findById(_id)
+        if (!task) throw new Error('no such an task')
+
+        body.forEach((key)=> {
+            task[key] = req.body[key]
+        })
+        await task.save()
+
+        res.status(201).send(task)
     } catch(e){
         res.status(400).send(e.message)
     }

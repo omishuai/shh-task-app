@@ -19,6 +19,19 @@ router.post('/users', (req, res) => {
     })
 })
 
+//ask for login verification
+router.post('/users/login', async (req, res) => {
+    try {
+        const user = await User.findByCredentials(req.body.password, req.body.email)
+        if (!user) {
+            throw new Error('the user is not found')
+        }
+        res.status(201).send(user)
+    } catch (e) {
+        res.status(500).send(e.message)
+    } 
+}) 
+
 router.get('/users', (req, res) => {
     //searching for users
     User.find({}).then((users)=>{
@@ -53,9 +66,17 @@ router.patch('/users/:id', async (req, res) => {
             return alloweUpdates.includes(field)
         })
         if (!isValid) throw new Error('bad update request')
-        const newUser = await User.findByIdAndUpdate(_id, req.body, {new: true})
-        if (!newUser) throw new Error('no such an user')
-        res.status(201).send(newUser)
+       /* 
+        const user = await User.findByIdAndUpdate(_id, req.body, {new: true, useFindAndModify: true})
+       */
+        const user = await User.findById(_id)
+        body.forEach((key) => {
+            user[key] = req.body[key]
+        })
+        await user.save()
+
+        if (!user) throw new Error('no such an user')
+        res.status(201).send(user)
     } catch(e){
         res.status(400).send(e.message)
     }

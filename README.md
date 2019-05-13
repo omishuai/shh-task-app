@@ -37,3 +37,11 @@ new express.Router()
 -sync_wait to better structure the promise methods
 instead of chaining all promises, we can try catch the promises with await key word, and wrap them in an async method, 
 
+--security
+hashing algorithm for encryption: bcrypt (non-reversible)
+
+--the difference between update through individual field access and update by findByIdAndUpdate() all at once
+with middleware involved
+middleware.pre 
+-> save() before the action of saving is performed -> middleware pre('save') is called, and the
+callback function is executed, and after next() is signaled, save() function can continue
