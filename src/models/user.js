@@ -2,6 +2,7 @@
 
 const mongoose = require('mongoose')
 const validator = require('validator')
+const chalk = require('chalk')
 
 //create schema 
 const userSchema = new mongoose.Schema({
@@ -11,6 +12,12 @@ const userSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
+    tokens: [{
+        token: {
+            type: String,
+            require: true,
+        },
+    }],
     password: {
         type: String,
         required: true,
@@ -58,6 +65,46 @@ userSchema.pre('save', async function(next){
     next()
 })
 
+const jwt = require('jsonwebtoken')
+
+//schema methods for single instance
+//arrow function does not have binding
+userSchema.methods.createToken = async function(){
+    const user = this
+    console.log({user})
+    const token = jwt.sign({_id: user._id.toString()}, "secret key" )
+    
+    //save the user to the database
+    user.tokens = user.tokens.concat({token})
+    await user.save()
+    console.log("sending back token:", token)
+    return token
+}
+
+//no error function since we need data binding
+userSchema.methods.getPublicProfile = function () {
+    const user = this
+    console.log({user})
+    const userObject = user.toObject()
+    console.log(chalk.green('turning to object'))
+    console.log(userObject)
+    delete userObject.password
+    delete userObject.tokens
+    return userObject
+}
+
+userSchema.methods.toJSON = function () {
+    const user = this
+    console.log({user})
+    const userObject = user.toObject()
+    console.log(chalk.green('turning to object'))
+    console.log(userObject)
+    delete userObject.password
+    delete userObject.tokens
+    return userObject
+}
+
+//schema statics for the model directly
 userSchema.statics.findByCredentials = async (password, email) => {
     
     const user = await User.findOne({email})

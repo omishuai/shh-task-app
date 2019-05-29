@@ -45,3 +45,26 @@ with middleware involved
 middleware.pre 
 -> save() before the action of saving is performed -> middleware pre('save') is called, and the
 callback function is executed, and after next() is signaled, save() function can continue
+
+
+JSON Web Tokens : jwt   npm:jsonwebtoken
+//user use token that sent by from the backend to modify data
+//backend will create the token based on encoding and user information and then send back to user
+//routers will be categotized into private or public, where private can only be accessed by users with the valid token prepared previously by backend, and public will be like user login page 
+
+
+//express middleware: create a new directory to store middleware
+with middleware:
+new request-> router handler is called
+without middleware:
+new request-> do_something -> run router handler
+middleware sits in between a raw request and the final intended route
+combining route and middle ware
+router.get('route', middleware, event handler()=>{})
+
+==Postman
+adding new environment (example see create User)
+to avoid retyping the environment each time when we switching the environment 
+
+
+
